@@ -18,6 +18,7 @@ import {
   FlatList
 } from 'react-native'
 
+import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
 import NoDataView from '../main/GDNoDataView'
@@ -38,22 +39,20 @@ export default class GDHome extends Component {
     this.fetchData()
   }
 
-  fetchData() {
-    let formData = new FormData()
-    formData.append('count', 30)
-    fetch('http://guangdiu.com/api/getlist.php',{
-      method:'POST',
-      headers:{},
-      body:formData
-    })
-      .then(response => response.json())
+  fetchData(value) {
+    let params = { count: 10, sinceid: value }
+    HTTPBase.post('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         this.setState({
           dataSource: this.state.dataSource.concat(responseData.data),
           loaded: true,
           refreshing: false
         })
+
+        let cnlastID = responseData.data[responseData.data.length - 1].id
+        AsyncStorage.setItem('cnlastID', cnlastID.toString())
       })
+      .catch(err => {})
   }
 
   renderLeftItem() {
@@ -116,9 +115,20 @@ export default class GDHome extends Component {
           style={styles.listViewStyle}
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
+          ListFooterComponent={this.renderListFooter}
+          onEndReachedThreshold={0.5}
+          onEndReached={this.onEndReached}
         />
       )
     }
+  }
+
+  renderListFooter() {
+    return (
+      <View style={{ height: 100 }}>
+        <ActivityIndicator />
+      </View>
+    )
   }
 
   renderItem({ item }) {
@@ -128,6 +138,15 @@ export default class GDHome extends Component {
   onRefresh = () => {
     this.setState({ refreshing: true })
     this.fetchData()
+  }
+
+  onEndReached = () => {
+    console.log('onEndReached')
+    // this.setState({ refreshing: true })
+    // this.fetchData()
+    AsyncStorage.getItem('cnlastID').then(value => {
+      this.fetchData(value)
+    })
   }
 
   render() {

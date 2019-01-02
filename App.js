@@ -5,6 +5,7 @@ import {
   createBottomTabNavigator,
   createAppContainer
 } from 'react-navigation'
+import LaunchPage from './app/main/GDLaunchPage'
 import Home from './app/home/GDHome'
 import HT from './app/ht/GDHt'
 import HourList from './app/hourList/GDHourList'
@@ -111,10 +112,21 @@ const TabNavigator = createBottomTabNavigator(
   }
 )
 
+const ScreenStack = createStackNavigator(
+  {
+    HalfHourHot: HalfHourHot
+  },
+  {
+    headerMode: 'none',
+    mode: 'modal'
+  }
+)
+
 const HomeStack = createStackNavigator(
   {
+    LaunchPage: LaunchPage,
     Tabs: TabNavigator,
-    HalfHourHot: HalfHourHot
+    ScreenStack: ScreenStack
   },
   {
     headerMode: 'none'

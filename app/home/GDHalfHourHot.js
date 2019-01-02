@@ -18,6 +18,7 @@ import {
   FlatList
 } from 'react-native'
 
+import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
 import NoDataView from '../main/GDNoDataView'
@@ -39,8 +40,7 @@ export default class GDHalfHourHot extends Component {
   }
 
   fetchData() {
-    fetch('http://guangdiu.com/api/gethots.php')
-      .then(response => response.json())
+    HTTPBase.get('http://guangdiu.com/api/gethots.php')
       .then(responseData => {
         this.setState({
           dataSource: this.state.dataSource.concat(responseData.data),
@@ -48,6 +48,7 @@ export default class GDHalfHourHot extends Component {
           refreshing: false
         })
       })
+      .catch(err => {})
   }
 
   renderTitleItem() {
