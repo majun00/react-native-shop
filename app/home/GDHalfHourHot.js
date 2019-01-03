@@ -51,6 +51,21 @@ export default class GDHalfHourHot extends Component {
       .catch(err => {})
   }
 
+  popToHome() {
+    this.props.navigation.goBack()
+  }
+
+  onRefresh = () => {
+    this.setState({ refreshing: true })
+    this.fetchData()
+  }
+
+  pushToDetail(id) {
+    this.props.navigation.navigate('CommunalDetail', {
+      url: 'https://guangdiu.com/api/showdetail.php?id=' + id
+    })
+  }
+
   renderTitleItem() {
     return <Text style={styles.navbarTitleItemStyle}>近半小时热门</Text>
   }
@@ -67,10 +82,6 @@ export default class GDHalfHourHot extends Component {
     )
   }
 
-  popToHome() {
-    this.props.navigation.navigate('Home')
-  }
-
   renderView() {
     if (this.state.loaded === false) {
       return <NoDataView />
@@ -78,7 +89,7 @@ export default class GDHalfHourHot extends Component {
       return (
         <FlatList
           data={this.state.dataSource}
-          renderItem={this.renderItem}
+          renderItem={this.renderItem.bind(this)}
           style={styles.listViewStyle}
           ListHeaderComponent={this.renderListHeader}
           refreshing={this.state.refreshing}
@@ -89,7 +100,11 @@ export default class GDHalfHourHot extends Component {
   }
 
   renderItem({ item }) {
-    return <CommunalHotCell image={item.image} title={item.title} />
+    return (
+      <TouchableOpacity onPress={() => this.pushToDetail(item.id)}>
+        <CommunalHotCell image={item.image} title={item.title} />
+      </TouchableOpacity>
+    )
   }
 
   renderListHeader() {
@@ -98,11 +113,6 @@ export default class GDHalfHourHot extends Component {
         <Text>根据每条折扣的点击进行统计,每5分钟更新一次</Text>
       </View>
     )
-  }
-
-  onRefresh = () => {
-    this.setState({ refreshing: true })
-    this.fetchData()
   }
 
   render() {
@@ -124,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center'
   },
-
   navbarTitleItemStyle: {
     fontSize: 17,
     color: 'black',
@@ -135,11 +144,9 @@ const styles = StyleSheet.create({
     color: 'rgba(123,178,114,1.0)',
     marginRight: 15
   },
-
   listViewStyle: {
     width: width
   },
-
   headerPromptStyle: {
     height: 44,
     width: width,

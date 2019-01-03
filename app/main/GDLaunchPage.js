@@ -10,6 +10,7 @@ export default class GDLaunchPage extends Component {
       this.props.navigation.replace('Tabs')
     }, 2000)
   }
+  
   render() {
     return <Image source={{ uri: 'launchimage' }} style={styles.imageStyle} />
   }

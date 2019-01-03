@@ -40,7 +40,7 @@ export default class GDHome extends Component {
   }
 
   fetchData(value) {
-    let params = { count: 10, sinceid: value }
+    let params = { 'count': 10, 'sinceid': value }
     HTTPBase.post('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         this.setState({
@@ -53,6 +53,27 @@ export default class GDHome extends Component {
         AsyncStorage.setItem('cnlastID', cnlastID.toString())
       })
       .catch(err => {})
+  }
+
+  pushToHalfHourHot() {
+    this.props.navigation.navigate('HalfHourHot')
+  }
+
+  pushToDetail(id) {
+    this.props.navigation.navigate('CommunalDetail', {
+      url: 'https://guangdiu.com/api/showdetail.php?id=' + id
+    })
+  }
+
+  onRefresh = () => {
+    this.setState({ refreshing: true })
+    this.fetchData()
+  }
+
+  onEndReached = () => {
+    AsyncStorage.getItem('cnlastID').then(value => {
+      this.fetchData(value)
+    })
   }
 
   renderLeftItem() {
@@ -100,10 +121,6 @@ export default class GDHome extends Component {
     )
   }
 
-  pushToHalfHourHot() {
-    this.props.navigation.navigate('HalfHourHot')
-  }
-
   renderView() {
     if (this.state.loaded === false) {
       return <NoDataView />
@@ -111,7 +128,7 @@ export default class GDHome extends Component {
       return (
         <FlatList
           data={this.state.dataSource}
-          renderItem={this.renderItem}
+          renderItem={this.renderItem.bind(this)}
           style={styles.listViewStyle}
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
@@ -125,28 +142,18 @@ export default class GDHome extends Component {
 
   renderListFooter() {
     return (
-      <View style={{ height: 100 }}>
+      <View style={{ height: 50 }}>
         <ActivityIndicator />
       </View>
     )
   }
 
   renderItem({ item }) {
-    return <CommunalHotCell image={item.image} title={item.title} />
-  }
-
-  onRefresh = () => {
-    this.setState({ refreshing: true })
-    this.fetchData()
-  }
-
-  onEndReached = () => {
-    console.log('onEndReached')
-    // this.setState({ refreshing: true })
-    // this.fetchData()
-    AsyncStorage.getItem('cnlastID').then(value => {
-      this.fetchData(value)
-    })
+    return (
+      <TouchableOpacity onPress={() => this.pushToDetail(item.id)}>
+        <CommunalHotCell image={item.image} title={item.title} />
+      </TouchableOpacity>
+    )
   }
 
   render() {
@@ -170,7 +177,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
-
   navBarLeftItemStyle: {
     width: 20,
     height: 20,
@@ -185,7 +191,6 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 15
   },
-
   listViewStyle: {
     width: width
   }

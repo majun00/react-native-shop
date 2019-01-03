@@ -16,8 +16,8 @@ import {
   Animated,
   Platform
 } from 'react-native'
-import PropTypes from 'prop-types'
 
+import PropTypes from 'prop-types'
 const { width, height } = Dimensions.get('window')
 
 export default class GDCommunalNavBar extends Component {

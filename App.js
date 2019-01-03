@@ -10,6 +10,8 @@ import Home from './app/home/GDHome'
 import HT from './app/ht/GDHt'
 import HourList from './app/hourList/GDHourList'
 import HalfHourHot from './app/home/GDHalfHourHot'
+import USHalfHourHot from './app/ht/GDUSHalfHourHot'
+import CommunalDetail from './app/main/GDCommunalDetail'
 
 // const HomeStack = createStackNavigator(
 //   {
@@ -114,7 +116,7 @@ const TabNavigator = createBottomTabNavigator(
 
 const ScreenStack = createStackNavigator(
   {
-    HalfHourHot: HalfHourHot
+    CommunalDetail: CommunalDetail
   },
   {
     headerMode: 'none',
@@ -126,7 +128,9 @@ const HomeStack = createStackNavigator(
   {
     LaunchPage: LaunchPage,
     Tabs: TabNavigator,
-    ScreenStack: ScreenStack
+    ScreenStack: ScreenStack,
+    HalfHourHot: HalfHourHot,
+    USHalfHourHot: USHalfHourHot,
   },
   {
     headerMode: 'none'

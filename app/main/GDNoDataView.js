@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     textStyle: {
         fontSize: 21,
         color: 'gray'
