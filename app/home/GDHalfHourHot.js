@@ -43,7 +43,7 @@ export default class GDHalfHourHot extends Component {
     HTTPBase.get('http://guangdiu.com/api/gethots.php')
       .then(responseData => {
         this.setState({
-          dataSource: this.state.dataSource.concat(responseData.data),
+          dataSource: responseData.data,
           loaded: true,
           refreshing: false
         })

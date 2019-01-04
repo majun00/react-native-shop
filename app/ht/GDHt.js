@@ -43,8 +43,12 @@ export default class GDHome extends Component {
     let params = { count: 10, sinceid: value, country: 'us' }
     HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
+        let oldData = this.state.dataSource
+        if (!value) {
+          oldData = []
+        }
         this.setState({
-          dataSource: this.state.dataSource.concat(responseData.data),
+          dataSource: oldData.concat(responseData.data),
           loaded: true,
           refreshing: false
         })
