@@ -16,6 +16,7 @@ import {
   Animated,
   Platform
 } from 'react-native'
+
 import PropTypes from 'prop-types'
 
 const { width, height } = Dimensions.get('window')
@@ -30,6 +31,7 @@ export default class GDCommunalCell extends Component {
   }
 
   renderDate(pubTime, fromSite) {
+    console.log(pubTime)
     let minute = 1000 * 60
     let hour = minute * 60
     let day = hour * 24

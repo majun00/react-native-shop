@@ -20,7 +20,7 @@ import {
 
 import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
-import CommunalHotCell from '../main/GDCommunalCell'
+import CommunalHotCell from '../main/GDCommunalHotCell'
 import NoDataView from '../main/GDNoDataView'
 
 const { width, height } = Dimensions.get('window')
