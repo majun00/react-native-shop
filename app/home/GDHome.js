@@ -18,7 +18,7 @@ import {
   FlatList
 } from 'react-native'
 
-import RealmStorage from '../storage/realmStorage'
+import RealmBase from '../storage/realmStorage'
 import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
@@ -58,8 +58,24 @@ export default class GDHome extends Component {
         AsyncStorage.setItem('cnlastID', cnlastID.toString())
         let cnfirstID = responseData.data[0].id
         AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
+
+        if (!value) {
+          console.log('!value')
+          // RealmBase.removeAllData('HomeData')
+          // RealmBase.create('HomeData', responseData.data)
+        }
       })
-      .catch(err => {})
+      .catch(err => {
+        console.log('err', err, value)
+        // if (!value) {
+        //   let oldData = RealmBase.loadAll('HomeData')
+        //   this.setState({
+        //     dataSource: oldData,
+        //     loaded: true,
+        //     refreshing: false
+        //   })
+        // }
+      })
   }
 
   pushToHalfHourHot() {

@@ -3,7 +3,7 @@
  * @Author: majun
  * @Date: 2019-01-04 09:47:09
  * @LastEditors: majun
- * @LastEditTime: 2019-01-04 16:54:41
+ * @LastEditTime: 2019-01-04 17:34:51
  */
 
 import Realm from 'realm'
@@ -40,7 +40,7 @@ let realm = new Realm({ schema: [HomeSchema, HTSchema] })
 // 增
 RealmBase.create = (schema, data) => {
   realm.write(() => {
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       let temp = data[i]
       realm.create(schema, {
         id: temp.id,

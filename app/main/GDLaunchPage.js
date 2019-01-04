@@ -5,6 +5,7 @@ const { width, height } = Dimensions.get('window')
 
 export default class GDLaunchPage extends Component {
   componentDidMount() {
+    console.log('launch')
     setTimeout(() => {
     //   this.props.navigation.navigate('HT')
       this.props.navigation.replace('Tabs')
