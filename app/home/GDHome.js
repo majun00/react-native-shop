@@ -18,6 +18,7 @@ import {
   FlatList
 } from 'react-native'
 
+// import RealmStorage from '../storage/realmStorage'
 import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
@@ -37,11 +38,12 @@ export default class GDHome extends Component {
 
   componentDidMount() {
     this.fetchData()
+    // console.log('Realm', RealmStorage)
   }
 
   fetchData(value) {
-    let params = { 'count': 10, 'sinceid': value }
-    HTTPBase.post('http://guangdiu.com/api/getlist.php', params)
+    let params = { count: 10, sinceid: value }
+    HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         this.setState({
           dataSource: this.state.dataSource.concat(responseData.data),
@@ -51,6 +53,8 @@ export default class GDHome extends Component {
 
         let cnlastID = responseData.data[responseData.data.length - 1].id
         AsyncStorage.setItem('cnlastID', cnlastID.toString())
+        let cnfirstID = responseData.data[0].id
+        AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
       })
       .catch(err => {})
   }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { StyleSheet, Image, Platform } from 'react-native'
 import {
   createStackNavigator,
   createBottomTabNavigator,
   createAppContainer
 } from 'react-navigation'
+
 import LaunchPage from './app/main/GDLaunchPage'
 import Home from './app/home/GDHome'
 import HT from './app/ht/GDHt'
@@ -12,6 +12,7 @@ import HourList from './app/hourList/GDHourList'
 import HalfHourHot from './app/home/GDHalfHourHot'
 import USHalfHourHot from './app/ht/GDUSHalfHourHot'
 import CommunalDetail from './app/main/GDCommunalDetail'
+import IconWithBadge from './app/main/IconWithBadge'
 
 // const HomeStack = createStackNavigator(
 //   {
@@ -43,18 +44,10 @@ const TabNavigator = createBottomTabNavigator(
         tabBarLabel: '首页',
         tabBarIcon: ({ focused }) => {
           if (focused) {
-            return (
-              <Image
-                source={{ uri: 'tabbar_home_selected_30x30' }}
-                style={styles.tabbarIconStyle}
-              />
-            )
+            return <IconWithBadge uri={'tabbar_home_selected_30x30'} />
           }
           return (
-            <Image
-              source={{ uri: 'tabbar_home_30x30' }}
-              style={styles.tabbarIconStyle}
-            />
+            <IconWithBadge name={'home'} uri={'tabbar_home_30x30'} />
           )
         }
       }
@@ -66,19 +59,9 @@ const TabNavigator = createBottomTabNavigator(
         tabBarLabel: '海淘',
         tabBarIcon: ({ focused }) => {
           if (focused) {
-            return (
-              <Image
-                source={{ uri: 'tabbar_abroad_selected_30x30' }}
-                style={styles.tabbarIconStyle}
-              />
-            )
+            return <IconWithBadge uri={'tabbar_abroad_selected_30x30'} />
           }
-          return (
-            <Image
-              source={{ uri: 'tabbar_abroad_30x30' }}
-              style={styles.tabbarIconStyle}
-            />
-          )
+          return <IconWithBadge uri={'tabbar_abroad_30x30'} />
         }
       }
     },
@@ -90,19 +73,9 @@ const TabNavigator = createBottomTabNavigator(
         tabBarVisible: true,
         tabBarIcon: ({ focused }) => {
           if (focused) {
-            return (
-              <Image
-                source={{ uri: 'tabbar_rank_selected_30x30' }}
-                style={styles.tabbarIconStyle}
-              />
-            )
+            return <IconWithBadge uri={'tabbar_rank_selected_30x30'} />
           }
-          return (
-            <Image
-              source={{ uri: 'tabbar_rank_30x30' }}
-              style={styles.tabbarIconStyle}
-            />
-          )
+          return <IconWithBadge uri={'tabbar_rank_30x30'} />
         }
       }
     }
@@ -130,19 +103,12 @@ const HomeStack = createStackNavigator(
     Tabs: TabNavigator,
     ScreenStack: ScreenStack,
     HalfHourHot: HalfHourHot,
-    USHalfHourHot: USHalfHourHot,
+    USHalfHourHot: USHalfHourHot
   },
   {
     headerMode: 'none'
   }
 )
-
-const styles = StyleSheet.create({
-  tabbarIconStyle: {
-    width: Platform.OS === 'ios' ? 30 : 25,
-    height: Platform.OS === 'ios' ? 30 : 25
-  }
-})
 
 // export default createAppContainer(TabNavigator)
 export default createAppContainer(HomeStack)

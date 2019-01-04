@@ -41,7 +41,7 @@ export default class GDHome extends Component {
 
   fetchData(value) {
     let params = { count: 10, sinceid: value, country: 'us' }
-    HTTPBase.post('http://guangdiu.com/api/getlist.php', params)
+    HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         this.setState({
           dataSource: this.state.dataSource.concat(responseData.data),
@@ -51,6 +51,8 @@ export default class GDHome extends Component {
 
         let cnlastID = responseData.data[responseData.data.length - 1].id
         AsyncStorage.setItem('cnlastID', cnlastID.toString())
+        let cnfirstID = responseData.data[0].id
+        AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
       })
       .catch(err => {})
   }

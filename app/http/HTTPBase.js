@@ -1,9 +1,9 @@
 /*
- * @Description:
+ * @Description: 请求封装
  * @Author: majun
  * @Date: 2019-01-02 15:04:27
  * @LastEditors: majun
- * @LastEditTime: 2019-01-03 11:21:32
+ * @LastEditTime: 2019-01-04 09:47:59
  */
 
 let HTTPBase = {}
@@ -21,7 +21,7 @@ HTTPBase.get = (url, params, headers) => {
     let paramsArray = []
     let paramsKeyArray = Object.keys(params)
     paramsKeyArray.forEach(key => {
-      paramsArray.push((key = params[key]))
+      paramsArray.push(key + '=' + params[key])
     })
 
     if (url.search(/\?/) === -1) {
