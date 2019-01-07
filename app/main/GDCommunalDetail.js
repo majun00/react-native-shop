@@ -20,6 +20,7 @@ import {
 
 import PropTypes from 'prop-types'
 import CommunalNavBar from './GDCommunalNavBar'
+
 const { width, height } = Dimensions.get('window')
 
 export default class GDCommunalDetail extends Component {

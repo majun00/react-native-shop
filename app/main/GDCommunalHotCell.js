@@ -16,6 +16,7 @@ import {
   Animated,
   Platform
 } from 'react-native'
+
 import PropTypes from 'prop-types'
 
 const { width, height } = Dimensions.get('window')
@@ -29,8 +30,16 @@ export default class GDCommunalCell extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image source={{ uri: this.props.image === '' ? 'defaullt_thumb_83x83' : this.props.image }} style={styles.imageStyle} />
-        
+        <Image
+          source={{
+            uri:
+              this.props.image === ''
+                ? 'defaullt_thumb_83x83'
+                : this.props.image
+          }}
+          style={styles.imageStyle}
+        />
+
         <View>
           <Text numberOfLines={3} style={styles.titleStyle}>
             {this.props.title}

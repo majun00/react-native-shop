@@ -14,6 +14,7 @@ import USHalfHourHot from './app/ht/GDUSHalfHourHot'
 import CommunalDetail from './app/main/GDCommunalDetail'
 import IconWithBadge from './app/main/IconWithBadge'
 import Search from './app/main/GDSearch'
+import Setting from './app/hourList/GDSetting'
 
 // const HomeStack = createStackNavigator(
 //   {
@@ -104,6 +105,7 @@ const HomeStack = createStackNavigator(
     HalfHourHot: HalfHourHot,
     USHalfHourHot: USHalfHourHot,
     Search: Search,
+    Setting: Setting
   },
   {
     headerMode: 'none'

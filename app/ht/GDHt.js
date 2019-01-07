@@ -160,7 +160,11 @@ export default class GDHome extends Component {
 
   renderItem({ item }) {
     return (
-      <TouchableOpacity onPress={() => this.pushToDetail(item.id)}>
+      <TouchableOpacity
+        onPress={() => {
+          this.pushToDetail(item.id)
+        }}
+      >
         <CommunalHotCell
           image={item.image}
           title={item.title}

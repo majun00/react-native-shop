@@ -87,7 +87,7 @@ export default class GDHourList extends Component {
   }
 
   pushToSetting() {
-    // this.props.navigation.navigate('Setting')
+    this.props.navigation.navigate('Setting')
   }
 
   lastHour() {
@@ -137,7 +137,11 @@ export default class GDHourList extends Component {
 
   renderItem({ item }) {
     return (
-      <TouchableOpacity onPress={() => this.pushToDetail(item.id)}>
+      <TouchableOpacity
+        onPress={() => {
+          this.pushToDetail(item.id)
+        }}
+      >
         <CommunalHotCell
           image={item.image}
           title={item.title}

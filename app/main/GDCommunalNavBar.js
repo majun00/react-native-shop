@@ -18,6 +18,7 @@ import {
 } from 'react-native'
 
 import PropTypes from 'prop-types'
+
 const { width, height } = Dimensions.get('window')
 
 export default class GDCommunalNavBar extends Component {
@@ -28,17 +29,17 @@ export default class GDCommunalNavBar extends Component {
   }
 
   renderLeftItem() {
-    if (this.props.leftItem === undefined) return;
+    if (this.props.leftItem === undefined) return
     return this.props.leftItem()
   }
 
   renderTitleItem() {
-    if (this.props.titleItem === undefined) return;
+    if (this.props.titleItem === undefined) return
     return this.props.titleItem()
   }
 
   renderRightItem() {
-    if (this.props.rightItem === undefined) return;
+    if (this.props.rightItem === undefined) return
     return this.props.rightItem()
   }
 

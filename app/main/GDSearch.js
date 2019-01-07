@@ -132,7 +132,11 @@ export default class GDSearch extends Component {
 
   renderItem({ item }) {
     return (
-      <TouchableOpacity onPress={() => this.pushToDetail(item.id)}>
+      <TouchableOpacity
+        onPress={() => {
+          this.pushToDetail(item.id)
+        }}
+      >
         <CommunalHotCell
           image={item.image}
           title={item.title}
@@ -236,7 +240,7 @@ const styles = StyleSheet.create({
     width: width * 0.75,
     height: 35,
     marginLeft: 8,
-    fontSize:12
+    fontSize: 12
   },
 
   listViewStyle: {
