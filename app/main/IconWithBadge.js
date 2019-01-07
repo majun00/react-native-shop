@@ -8,7 +8,7 @@ import {
   AsyncStorage
 } from 'react-native'
 
-// import HTTPBase from '../http/HTTPBase'
+import HTTPBase from '../http/HTTPBase'
 
 export default class GDNoDataView extends Component {
   constructor(props) {
@@ -61,8 +61,8 @@ export default class GDNoDataView extends Component {
 
   getBadge() {
     console.log('getBadge')
-    // if (this.props.name == 'home') {
     return this.renderBadge(this.state.badgeCount)
+    // if (this.props.name == 'home') {
     //   setInterval(() => {
     //     this.setState({
     //       badgeCount: this.state.badgeCount + 1

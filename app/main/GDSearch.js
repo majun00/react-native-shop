@@ -15,7 +15,8 @@ import {
   InteractionManager,
   Animated,
   Platform,
-  FlatList
+  FlatList,
+  TextInput
 } from 'react-native'
 
 import HTTPBase from '../http/HTTPBase'
@@ -24,8 +25,9 @@ import CommunalHotCell from '../main/GDCommunalCell'
 import NoDataView from '../main/GDNoDataView'
 
 const { width, height } = Dimensions.get('window')
+const dismissKeyboard = require('dismissKeyboard')
 
-export default class GDHome extends Component {
+export default class GDSearch extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,15 +35,16 @@ export default class GDHome extends Component {
       loaded: false,
       refreshing: false
     }
-  }
 
-  componentDidMount() {
-    this.fetchData()
+    this.changeText = ''
   }
 
   fetchData(value) {
-    let params = { count: 10, sinceid: value, country: 'us' }
-    HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
+    if (!this.changeText) {
+      return
+    }
+    let params = { q: this.changeText, sinceid: value }
+    HTTPBase.get('http://guangdiu.com/api/getresult.php', params)
       .then(responseData => {
         let oldData = this.state.dataSource
         if (!value) {
@@ -53,20 +56,15 @@ export default class GDHome extends Component {
           refreshing: false
         })
 
-        let cnlastID = responseData.data[responseData.data.length - 1].id
-        AsyncStorage.setItem('cnlastID', cnlastID.toString())
-        let cnfirstID = responseData.data[0].id
-        AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
+        let searchLastID = responseData.data[responseData.data.length - 1].id
+        AsyncStorage.setItem('searchLastID', searchLastID.toString())
       })
       .catch(err => {})
   }
 
-  pushToHalfHourHot() {
-    this.props.navigation.navigate('USHalfHourHot')
-  }
-
-  pushToSearch() {
-    this.props.navigation.navigate('Search')
+  pop() {
+    dismissKeyboard()
+    this.props.navigation.pop()
   }
 
   pushToDetail(id) {
@@ -81,7 +79,7 @@ export default class GDHome extends Component {
   }
 
   onEndReached = () => {
-    AsyncStorage.getItem('cnlastID').then(value => {
+    AsyncStorage.getItem('searchLastID').then(value => {
       this.fetchData(value)
     })
   }
@@ -90,45 +88,19 @@ export default class GDHome extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          this.pushToHalfHourHot()
+          this.pop()
         }}
       >
-        <Image
-          source={{ uri: 'hot_icon_20x20' }}
-          style={styles.navBarLeftItemStyle}
-        />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image source={{ uri: 'back' }} style={styles.navbarLeftItemStyle} />
+          <Text>返回</Text>
+        </View>
       </TouchableOpacity>
     )
   }
 
   renderTitleItem() {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          console.log('title')
-        }}
-      >
-        <Image
-          source={{ uri: 'navtitle_home_down_66x20' }}
-          style={styles.navBarTitleItemStyle}
-        />
-      </TouchableOpacity>
-    )
-  }
-
-  renderRightItem() {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.pushToSearch()
-        }}
-      >
-        <Image
-          source={{ uri: 'search_icon_20x20' }}
-          style={styles.navBarRightItemStyle}
-        />
-      </TouchableOpacity>
-    )
+    return <Text style={styles.navbarTitleItemStyle}>搜索全网折扣</Text>
   }
 
   renderView() {
@@ -178,8 +150,41 @@ export default class GDHome extends Component {
         <CommunalNavBar
           leftItem={() => this.renderLeftItem()}
           titleItem={() => this.renderTitleItem()}
-          rightItem={() => this.renderRightItem()}
         />
+
+        <View style={styles.toolsViewStyle}>
+          <View style={styles.inputViewStyle}>
+            <Image
+              source={{ uri: 'search_icon_20x20' }}
+              style={styles.searchImageStyle}
+            />
+
+            <TextInput
+              style={styles.textInputStyle}
+              keyboardType="default"
+              placeholder="请输入搜索商品关键字"
+              placeholderTextColor="gray"
+              autoFocus={true}
+              clearButtonMode="while-editing"
+              onChangeText={text => {
+                this.changeText = text
+              }}
+              onEndEditing={() => {
+                this.fetchData()
+              }}
+            />
+          </View>
+
+          <View style={{ marginLeft: 10 }}>
+            <TouchableOpacity
+              onPress={() => {
+                this.pop()
+              }}
+            >
+              <Text style={{ color: 'green' }}>取消</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {this.renderView()}
       </View>
@@ -193,20 +198,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
+
   navBarLeftItemStyle: {
     width: 20,
     height: 20,
     marginLeft: 15
   },
   navBarTitleItemStyle: {
-    width: 66,
-    height: 20
+    fontSize: 17,
+    color: 'black',
+    marginRight: 50
   },
-  navBarRightItemStyle: {
-    width: 20,
-    height: 20,
-    marginRight: 15
+
+  toolsViewStyle: {
+    width: width,
+    height: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
+
+  inputViewStyle: {
+    height: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(239,239,241,1.0)',
+    marginLeft: 10,
+    borderRadius: 5
+  },
+  searchImageStyle: {
+    width: 15,
+    height: 15,
+    marginLeft: 8
+  },
+  textInputStyle: {
+    width: width * 0.75,
+    height: 35,
+    marginLeft: 8,
+    fontSize:12
+  },
+
   listViewStyle: {
     width: width
   }

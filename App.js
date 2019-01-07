@@ -13,6 +13,7 @@ import HalfHourHot from './app/home/GDHalfHourHot'
 import USHalfHourHot from './app/ht/GDUSHalfHourHot'
 import CommunalDetail from './app/main/GDCommunalDetail'
 import IconWithBadge from './app/main/IconWithBadge'
+import Search from './app/main/GDSearch'
 
 // const HomeStack = createStackNavigator(
 //   {
@@ -46,9 +47,7 @@ const TabNavigator = createBottomTabNavigator(
           if (focused) {
             return <IconWithBadge uri={'tabbar_home_selected_30x30'} />
           }
-          return (
-            <IconWithBadge name={'home'} uri={'tabbar_home_30x30'} />
-          )
+          return <IconWithBadge name={'home'} uri={'tabbar_home_30x30'} />
         }
       }
     },
@@ -103,7 +102,8 @@ const HomeStack = createStackNavigator(
     Tabs: TabNavigator,
     ScreenStack: ScreenStack,
     HalfHourHot: HalfHourHot,
-    USHalfHourHot: USHalfHourHot
+    USHalfHourHot: USHalfHourHot,
+    Search: Search,
   },
   {
     headerMode: 'none'

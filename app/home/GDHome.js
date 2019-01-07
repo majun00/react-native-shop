@@ -60,13 +60,13 @@ export default class GDHome extends Component {
         AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
 
         if (!value) {
-          console.log('!value')
+          // console.log('!value')
           // RealmBase.removeAllData('HomeData')
           // RealmBase.create('HomeData', responseData.data)
         }
       })
       .catch(err => {
-        console.log('err', err, value)
+        // console.log('err', err, value)
         // if (!value) {
         //   let oldData = RealmBase.loadAll('HomeData')
         //   this.setState({
@@ -80,6 +80,10 @@ export default class GDHome extends Component {
 
   pushToHalfHourHot() {
     this.props.navigation.navigate('HalfHourHot')
+  }
+
+  pushToSearch() {
+    this.props.navigation.navigate('Search')
   }
 
   pushToDetail(id) {
@@ -133,7 +137,7 @@ export default class GDHome extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log('to search')
+          this.pushToSearch()
         }}
       >
         <Image
