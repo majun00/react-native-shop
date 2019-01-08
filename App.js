@@ -5,6 +5,7 @@ import {
   createAppContainer
 } from 'react-navigation'
 
+import './app/http/HTTPBase'
 import LaunchPage from './app/main/GDLaunchPage'
 import Home from './app/home/GDHome'
 import HT from './app/ht/GDHt'

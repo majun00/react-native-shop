@@ -19,7 +19,7 @@ import {
 } from 'react-native'
 
 import HTSiftData from '../data/HTSiftData.json'
-import HTTPBase from '../http/HTTPBase'
+// import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
 import CommunalSiftMenu from '../main/GDCommunalSiftMenu'

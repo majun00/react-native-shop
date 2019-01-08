@@ -3,7 +3,7 @@
  * @Author: majun
  * @Date: 2019-01-02 15:04:27
  * @LastEditors: majun
- * @LastEditTime: 2019-01-04 09:47:59
+ * @LastEditTime: 2019-01-08 16:48:23
  */
 
 let HTTPBase = {}
@@ -81,5 +81,5 @@ HTTPBase.post = (url, params, headers) => {
   })
 }
 
-// global.HTTPBase = HTTPBase
-export default HTTPBase
+global.HTTPBase = HTTPBase
+// export default HTTPBase

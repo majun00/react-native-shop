@@ -8,7 +8,7 @@ import {
   AsyncStorage
 } from 'react-native'
 
-import HTTPBase from '../http/HTTPBase'
+// import HTTPBase from '../http/HTTPBase'
 
 export default class GDNoDataView extends Component {
   constructor(props) {

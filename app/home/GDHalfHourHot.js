@@ -18,7 +18,7 @@ import {
   FlatList
 } from 'react-native'
 
-import HTTPBase from '../http/HTTPBase'
+// import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalHotCell'
 import NoDataView from '../main/GDNoDataView'

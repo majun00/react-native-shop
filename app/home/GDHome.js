@@ -18,9 +18,9 @@ import {
   FlatList
 } from 'react-native'
 
-import RealmBase from '../storage/realmStorage'
+// import RealmBase from '../storage/realmStorage'
 import HomeSiftData from '../data/HomeSiftData.json'
-import HTTPBase from '../http/HTTPBase'
+// import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
 import CommunalSiftMenu from '../main/GDCommunalSiftMenu'

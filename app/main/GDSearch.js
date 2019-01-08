@@ -19,7 +19,7 @@ import {
   TextInput
 } from 'react-native'
 
-import HTTPBase from '../http/HTTPBase'
+// import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
 import NoDataView from '../main/GDNoDataView'
