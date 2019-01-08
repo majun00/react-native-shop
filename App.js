@@ -47,9 +47,11 @@ const TabNavigator = createBottomTabNavigator(
         tabBarLabel: '首页',
         tabBarIcon: ({ focused }) => {
           if (focused) {
-            return <IconWithBadge uri={'tabbar_home_selected_30x30'} />
+            return (
+              <IconWithBadge name="home" uri={'tabbar_home_selected_30x30'} />
+            )
           }
-          return <IconWithBadge name={'home'} uri={'tabbar_home_30x30'} />
+          return <IconWithBadge name="home" uri={'tabbar_home_30x30'} />
         }
       }
     },
@@ -60,9 +62,11 @@ const TabNavigator = createBottomTabNavigator(
         tabBarLabel: '海淘',
         tabBarIcon: ({ focused }) => {
           if (focused) {
-            return <IconWithBadge uri={'tabbar_abroad_selected_30x30'} />
+            return (
+              <IconWithBadge name="ht" uri={'tabbar_abroad_selected_30x30'} />
+            )
           }
-          return <IconWithBadge uri={'tabbar_abroad_30x30'} />
+          return <IconWithBadge name="ht" uri={'tabbar_abroad_30x30'} />
         }
       }
     },

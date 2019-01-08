@@ -19,58 +19,56 @@ export default class GDNoDataView extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props)
-    // if (this.props.name == 'home') {
-    //   //   if (true) {
-    //   console.log('home')
-    //   setInterval(() => {
-    //     this.setState({
-    //       badgeCount: this.state.badgeCount + 1
-    //     })
-    //     console.log('state', this.state.badgeCount)
-    //   }, 3000)
-    // }
-    
-    //   let cnfirstID = 0
-    //   let usfirstID = 0
-    //   let cnbadgeText = 0
-    //   let usbadgeText = 0
-    // setInterval(() => {
-    //   AsyncStorage.getItem('cnfirstID').then(value => {
-    //     cnfirstID = parseInt(value)
-    //   })
-    //   AsyncStorage.getItem('usfirstID').then(value => {
-    //     usfirstID = parseInt(value)
-    //   })
-    //   if (cnfirstID !== 0 && usfirstID !== 0) {
-    //     let params = {
-    //       cnmaxid: cnfirstID,
-    //       usmaxid: usfirstID
-    //     }
-    //     HTTPBase.get('http://guangdiu.com/api/getnewitemcount.php', params).then(
-    //       responseData => {
-    //         cnbadgeText = parseInt(responseData.cn)
-    //         usbadgeText = parseInt(responseData.us)
-    //         cnbadgeText=2
-    //         console.log(responseData, cnbadgeText, usbadgeText)
-    //       }
-    //     )
-    //   }
-    // }, 3000)
+    // this.getBadge()
+  }
+
+  componentWillUnmount() {
+    this.timer && clearTimeout(this.timer)
   }
 
   getBadge() {
-    console.log('getBadge')
-    return this.renderBadge(this.state.badgeCount)
-    // if (this.props.name == 'home') {
-    //   setInterval(() => {
-    //     this.setState({
-    //       badgeCount: this.state.badgeCount + 1
-    //     })
-    //     console.log('state', this.state.badgeCount)
-    //     this.renderBadge(this.state.badgeCount)
-    //   }, 3000)
-    // }
+    let state = this.props.name
+    if (!state) {
+      return
+    }
+
+    let cnfirstID = 0
+    let usfirstID = 0
+    let cnbadgeText = 0
+    let usbadgeText = 0
+
+    this.timer = setInterval(() => {
+      AsyncStorage.getItem('cnfirstID').then(value => {
+        cnfirstID = parseInt(value)
+      })
+      AsyncStorage.getItem('usfirstID').then(value => {
+        usfirstID = parseInt(value)
+      })
+      if (cnfirstID !== 0 && usfirstID !== 0) {
+        let params = {
+          cnmaxid: cnfirstID,
+          usmaxid: usfirstID
+        }
+        HTTPBase.get(
+          'http://guangdiu.com/api/getnewitemcount.php',
+          params
+        ).then(responseData => {
+          // console.log('timer', responseData)
+          cnbadgeText = parseInt(responseData.cn)
+          usbadgeText = parseInt(responseData.us)
+        })
+      }
+
+      if (state == 'home') {
+        this.setState({
+          badgeCount: cnbadgeText
+        })
+      } else if (state == 'ht') {
+        this.setState({
+          badgeCount: usbadgeText
+        })
+      }
+    }, 3000)
   }
 
   renderBadge(badgeCount) {
@@ -105,8 +103,8 @@ export default class GDNoDataView extends Component {
           source={{ uri: this.props.uri }}
           style={styles.tabbarIconStyle}
         />
-        {/* {this.renderBadge(this.state.badgeCount)} */}
-        {this.getBadge()}
+
+        {this.renderBadge(this.state.badgeCount)}
       </View>
     )
   }
