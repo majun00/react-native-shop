@@ -19,9 +19,11 @@ import {
 } from 'react-native'
 
 import RealmBase from '../storage/realmStorage'
+import HomeSiftData from '../data/HomeSiftData.json'
 import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
+import CommunalSiftMenu from '../main/GDCommunalSiftMenu'
 import NoDataView from '../main/GDNoDataView'
 
 const { width, height } = Dimensions.get('window')
@@ -32,16 +34,19 @@ export default class GDHome extends Component {
     this.state = {
       dataSource: [],
       loaded: false,
-      refreshing: false
+      refreshing: false,
+      isSiftModal: false
     }
+    this.mall = ''
+    this.cate = ''
   }
 
   componentDidMount() {
     this.fetchData()
   }
 
-  fetchData(value) {
-    let params = { count: 10, sinceid: value }
+  fetchData(value = '') {
+    let params = { count: 10, sinceid: value, cate: this.cate, mall: this.mall }
     HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         let oldData = this.state.dataSource
@@ -59,11 +64,11 @@ export default class GDHome extends Component {
         let cnfirstID = responseData.data[0].id
         AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
 
-        if (!value) {
-          // console.log('!value')
-          // RealmBase.removeAllData('HomeData')
-          // RealmBase.create('HomeData', responseData.data)
-        }
+        // if (!value) {
+        //   console.log('!value')
+        //   RealmBase.removeAllData('HomeData')
+        //   RealmBase.create('HomeData', responseData.data)
+        // }
       })
       .catch(err => {
         // console.log('err', err, value)
@@ -89,6 +94,18 @@ export default class GDHome extends Component {
   pushToDetail(id) {
     this.props.navigation.navigate('CommunalDetail', {
       url: 'https://guangdiu.com/api/showdetail.php?id=' + id
+    })
+  }
+
+  showSiftMenu() {
+    this.setState({
+      isSiftModal: true
+    })
+  }
+
+  closeModal(data) {
+    this.setState({
+      isSiftModal: data
     })
   }
 
@@ -122,7 +139,7 @@ export default class GDHome extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log('title')
+          this.showSiftMenu()
         }}
       >
         <Image
@@ -160,7 +177,7 @@ export default class GDHome extends Component {
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
           ListFooterComponent={this.renderListFooter}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.1}
           onEndReached={this.onEndReached}
         />
       )
@@ -197,12 +214,36 @@ export default class GDHome extends Component {
     return (
       <View style={styles.container}>
         <CommunalNavBar
-          leftItem={() => this.renderLeftItem()}
+          leftItem={() => {
+            return this.renderLeftItem()
+          }}
           titleItem={() => this.renderTitleItem()}
           rightItem={() => this.renderRightItem()}
         />
 
         {this.renderView()}
+
+        <Modal
+          visible={this.state.isSiftModal}
+          onRequestClose={() => {
+            this.closeModal(false)
+          }}
+          transparent={true}
+          animationType="none"
+          pointerEvents={'box-none'}
+        >
+          <CommunalSiftMenu
+            data={HomeSiftData}
+            removeModal={data => {
+              this.closeModal(data)
+            }}
+            loadSiftData={(mall, cate) => {
+              this.mall = mall
+              this.cate = cate
+              this.fetchData()
+            }}
+          />
+        </Modal>
       </View>
     )
   }

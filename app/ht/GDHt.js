@@ -18,9 +18,11 @@ import {
   FlatList
 } from 'react-native'
 
+import HTSiftData from '../data/HTSiftData.json'
 import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
 import CommunalHotCell from '../main/GDCommunalCell'
+import CommunalSiftMenu from '../main/GDCommunalSiftMenu'
 import NoDataView from '../main/GDNoDataView'
 
 const { width, height } = Dimensions.get('window')
@@ -31,8 +33,11 @@ export default class GDHome extends Component {
     this.state = {
       dataSource: [],
       loaded: false,
-      refreshing: false
+      refreshing: false,
+      isSiftModal: false
     }
+    this.mall = ''
+    this.cate = ''
   }
 
   componentDidMount() {
@@ -40,7 +45,13 @@ export default class GDHome extends Component {
   }
 
   fetchData(value) {
-    let params = { count: 10, sinceid: value, country: 'us' }
+    let params = {
+      count: 10,
+      sinceid: value,
+      cate: this.cate,
+      mall: this.mall,
+      country: 'us'
+    }
     HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         let oldData = this.state.dataSource
@@ -75,6 +86,18 @@ export default class GDHome extends Component {
     })
   }
 
+  showSiftMenu() {
+    this.setState({
+      isSiftModal: true
+    })
+  }
+
+  closeModal(data) {
+    this.setState({
+      isSiftModal: data
+    })
+  }
+
   onRefresh = () => {
     this.setState({ refreshing: true })
     this.fetchData()
@@ -105,7 +128,7 @@ export default class GDHome extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log('title')
+          this.showSiftMenu()
         }}
       >
         <Image
@@ -143,7 +166,7 @@ export default class GDHome extends Component {
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
           ListFooterComponent={this.renderListFooter}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.1}
           onEndReached={this.onEndReached}
         />
       )
@@ -186,6 +209,28 @@ export default class GDHome extends Component {
         />
 
         {this.renderView()}
+
+        <Modal
+          visible={this.state.isSiftModal}
+          onRequestClose={() => {
+            this.closeModal(false)
+          }}
+          transparent={true}
+          animationType="none"
+          pointerEvents={'box-none'}
+        >
+          <CommunalSiftMenu
+            data={HTSiftData}
+            removeModal={data => {
+              this.closeModal(data)
+            }}
+            loadSiftData={(mall, cate) => {
+              this.mall = mall
+              this.cate = cate
+              this.fetchData()
+            }}
+          />
+        </Modal>
       </View>
     )
   }

@@ -32,7 +32,8 @@ export default class GDHourList extends Component {
       dataSource: [],
       loaded: false,
       refreshing: false,
-      prompt: ''
+      prompt: '',
+      isNextTouch: false
     }
     this.nexthourhour = ''
     this.nexthourdate = ''
@@ -54,7 +55,10 @@ export default class GDHourList extends Component {
     }
     HTTPBase.get('http://guangdiu.com/api/getranklist.php', params)
       .then(responseData => {
-        console.log(date, hour, responseData)
+        let isNextTouch = true
+        if (responseData.hasnexthour == 1) {
+          isNextTouch = false
+        }
         this.setState({
           dataSource: responseData.data,
           loaded: true,
@@ -65,7 +69,8 @@ export default class GDHourList extends Component {
             '点档' +
             '(' +
             responseData.rankduring +
-            ')'
+            ')',
+          isNextTouch: isNextTouch
         })
         this.nexthourhour = responseData.nexthourhour
         this.nexthourdate = responseData.nexthourdate
@@ -181,8 +186,15 @@ export default class GDHourList extends Component {
             onPress={() => {
               this.nextHour()
             }}
+            disabled={this.state.isNextTouch}
           >
-            <Text style={{ marginLeft: 10, fontSize: 17, color: 'green' }}>
+            <Text
+              style={{
+                marginLeft: 10,
+                fontSize: 17,
+                color: this.state.isNextTouch == false ? 'green' : 'gray'
+              }}
+            >
               {'下1小时' + ' >'}
             </Text>
           </TouchableOpacity>
