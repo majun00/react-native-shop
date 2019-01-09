@@ -5,7 +5,8 @@ import {
   Platform,
   View,
   Text,
-  AsyncStorage
+  AsyncStorage,
+  DeviceEventEmitter
 } from 'react-native'
 
 // import HTTPBase from '../http/HTTPBase'
@@ -16,59 +17,71 @@ export default class GDNoDataView extends Component {
     this.state = {
       badgeCount: 0
     }
+    this.cnfirstID = 0
+    this.usfirstID = 0
+    this.cnbadgeText = 0
+    this.usbadgeText = 0
+    this.name=''
   }
 
   componentDidMount() {
-    // this.getBadge()
+    this.name = this.props.name
+    this.startBadgeTimer()
+
+    this.subscription = DeviceEventEmitter.addListener('getBadge', () => {
+      this.getBadge()
+    })
   }
 
   componentWillUnmount() {
     this.timer && clearTimeout(this.timer)
+
+    this.subscription.remove()
   }
 
   getBadge() {
-    let state = this.props.name
-    if (!state) {
-      return
+    // AsyncStorage.multiGet(['cnfirstID', 'usfirstID'], (err, stores) => {
+    //   this.cnfirstID = parseInt(stores[0][1])
+    //   this.usfirstID = parseInt(stores[1][1])
+    // })
+    // if (this.cnfirstID !== 0 && this.usfirstID !== 0) {
+    //   let params = {
+    //     cnmaxid: this.cnfirstID,
+    //     usmaxid: this.usfirstID
+    //   }
+    //   HTTPBase.get('http://guangdiu.com/api/getnewitemcount.php', params)
+    //     .then(responseData => {
+    //       console.log('timer', responseData)
+    //       this.cnbadgeText = parseInt(responseData.cn)
+    //       this.usbadgeText = parseInt(responseData.us)
+    //     })
+    //     .catch(err => {})
+    // }
+
+    // mock
+    this.cnbadgeText = this.cnbadgeText + 1
+    this.usbadgeText = this.usbadgeText + 2
+
+    if (this.name == 'home') {
+      this.setState({
+        badgeCount: this.cnbadgeText
+      })
+    } else if (this.name == 'ht') {
+      this.setState({
+        badgeCount: this.usbadgeText
+      })
     }
 
-    let cnfirstID = 0
-    let usfirstID = 0
-    let cnbadgeText = 0
-    let usbadgeText = 0
+    console.log('getBadge', this.state.badgeCount)
+  }
 
+  startBadgeTimer() {
+    if (!this.name) {
+      return
+    }
     this.timer = setInterval(() => {
-      AsyncStorage.getItem('cnfirstID').then(value => {
-        cnfirstID = parseInt(value)
-      })
-      AsyncStorage.getItem('usfirstID').then(value => {
-        usfirstID = parseInt(value)
-      })
-      if (cnfirstID !== 0 && usfirstID !== 0) {
-        let params = {
-          cnmaxid: cnfirstID,
-          usmaxid: usfirstID
-        }
-        HTTPBase.get(
-          'http://guangdiu.com/api/getnewitemcount.php',
-          params
-        ).then(responseData => {
-          // console.log('timer', responseData)
-          cnbadgeText = parseInt(responseData.cn)
-          usbadgeText = parseInt(responseData.us)
-        })
-      }
-
-      if (state == 'home') {
-        this.setState({
-          badgeCount: cnbadgeText
-        })
-      } else if (state == 'ht') {
-        this.setState({
-          badgeCount: usbadgeText
-        })
-      }
-    }, 3000)
+      this.getBadge()
+    }, 10000)
   }
 
   renderBadge(badgeCount) {

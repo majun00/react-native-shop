@@ -96,6 +96,7 @@ export default class GDCommunalSiftMenu extends Component {
             initialNumToRender={16}
             horizontal={false}
             numColumns={4}
+            scrollEnabled={false}
           />
         </View>
       </TouchableOpacity>

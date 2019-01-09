@@ -42,9 +42,31 @@ export default class GDHome extends Component {
 
   componentDidMount() {
     this.fetchData()
+
+    this.subscription = DeviceEventEmitter.addListener('clickHTItem', () => {
+      this.clickTarBarItem()
+    })
   }
 
-  fetchData(value) {
+  componentWillUmmount() {
+    this.subscription.remove()
+  }
+
+  clickTarBarItem() {
+    let list = this.refs.list
+    if (list._listRef._scrollMetrics.offset == 0) {
+      this.setState({
+        refreshing: true
+      })
+      setTimeout(() => {
+        this.fetchData()
+      }, 1000)
+    } else {
+      list.scrollToOffset({ offset: 0 })
+    }
+  }
+
+  fetchData(value = '') {
     let params = {
       count: 10,
       sinceid: value,
@@ -160,6 +182,7 @@ export default class GDHome extends Component {
     } else {
       return (
         <FlatList
+          ref="list"
           data={this.state.dataSource}
           renderItem={this.renderItem.bind(this)}
           style={styles.listViewStyle}

@@ -43,6 +43,28 @@ export default class GDHome extends Component {
 
   componentDidMount() {
     this.fetchData()
+
+    this.subscription = DeviceEventEmitter.addListener('clickHomeItem', () => {
+      this.clickTarBarItem()
+    })
+  }
+
+  componentWillUmmount() {
+    this.subscription.remove()
+  }
+
+  clickTarBarItem() {
+    let list = this.refs.list
+    if (list._listRef._scrollMetrics.offset == 0) {
+      this.setState({
+        refreshing: true
+      })
+      setTimeout(() => {
+        this.fetchData()
+      }, 1000)
+    } else {
+      list.scrollToOffset({ offset: 0 })
+    }
   }
 
   fetchData(value = '') {
@@ -63,6 +85,8 @@ export default class GDHome extends Component {
         AsyncStorage.setItem('cnlastID', cnlastID.toString())
         let cnfirstID = responseData.data[0].id
         AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
+
+        DeviceEventEmitter.emit('getBadge')
 
         // if (!value) {
         //   console.log('!value')
@@ -171,6 +195,7 @@ export default class GDHome extends Component {
     } else {
       return (
         <FlatList
+          ref="list"
           data={this.state.dataSource}
           renderItem={this.renderItem.bind(this)}
           style={styles.listViewStyle}
@@ -179,6 +204,11 @@ export default class GDHome extends Component {
           ListFooterComponent={this.renderListFooter}
           onEndReachedThreshold={0.1}
           onEndReached={this.onEndReached}
+          // getItemLayout={(data, index) => ({
+          //   length: 100.5,
+          //   offset: 100.5 * index,
+          //   index
+          // })}
         />
       )
     }

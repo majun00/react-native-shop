@@ -179,7 +179,7 @@ export default class GDSearch extends Component {
             />
           </View>
 
-          <View style={{ marginLeft: 10 }}>
+          <View style={{ marginRight: 10 }}>
             <TouchableOpacity
               onPress={() => {
                 this.pop()
@@ -203,12 +203,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
 
-  navBarLeftItemStyle: {
+  navbarLeftItemStyle: {
     width: 20,
     height: 20,
     marginLeft: 15
   },
-  navBarTitleItemStyle: {
+  navbarTitleItemStyle: {
     fontSize: 17,
     color: 'black',
     marginRight: 50
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     width: width * 0.75,
     height: 35,
     marginLeft: 8,
-    fontSize: 12
+    fontSize: 13
   },
 
   listViewStyle: {

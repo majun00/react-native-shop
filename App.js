@@ -1,5 +1,23 @@
 import React, { Component } from 'react'
 import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ListView,
+  Dimensions,
+  Navigator,
+  ActivityIndicator,
+  Modal,
+  AsyncStorage,
+  DeviceEventEmitter,
+  InteractionManager,
+  Animated,
+  Platform,
+  FlatList
+} from 'react-native'
+import {
   createStackNavigator,
   createBottomTabNavigator,
   createAppContainer
@@ -45,6 +63,12 @@ const TabNavigator = createBottomTabNavigator(
       screen: Home,
       navigationOptions: {
         tabBarLabel: '首页',
+        tabBarOnPress: obj => {
+          if (obj.navigation.isFocused()){
+            DeviceEventEmitter.emit('clickHomeItem')
+          }
+          obj.defaultHandler()
+        },
         tabBarIcon: ({ focused }) => {
           if (focused) {
             return (
@@ -60,6 +84,12 @@ const TabNavigator = createBottomTabNavigator(
       screen: HT,
       navigationOptions: {
         tabBarLabel: '海淘',
+        tabBarOnPress: obj => {
+          if (obj.navigation.isFocused()) {
+            DeviceEventEmitter.emit('clickHTItem')
+          }
+          obj.defaultHandler()
+        },
         tabBarIcon: ({ focused }) => {
           if (focused) {
             return (
