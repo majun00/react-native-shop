@@ -45,7 +45,7 @@ export default class GDSearch extends Component {
     }
     let params = { q: this.changeText, sinceid: value }
     HTTPBase.get('http://guangdiu.com/api/getresult.php', params)
-      .then(responseData => {
+      .then(async responseData => {
         let oldData = this.state.dataSource
         if (!value) {
           oldData = []
@@ -57,7 +57,7 @@ export default class GDSearch extends Component {
         })
 
         let searchLastID = responseData.data[responseData.data.length - 1].id
-        AsyncStorage.setItem('searchLastID', searchLastID.toString())
+        await AsyncStorage.setItem('searchLastID', searchLastID.toString())
       })
       .catch(err => {})
   }

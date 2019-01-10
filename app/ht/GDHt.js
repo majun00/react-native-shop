@@ -81,7 +81,7 @@ export default class GDHome extends Component {
     }
 
     HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
-      .then(responseData => {
+      .then(async responseData => {
         let oldData = this.state.dataSource
         if (!value) {
           oldData = []
@@ -93,10 +93,10 @@ export default class GDHome extends Component {
         })
 
         let cnlastID = responseData.data[responseData.data.length - 1].id
-        AsyncStorage.setItem('cnlastID', cnlastID.toString())
+        await AsyncStorage.setItem('cnlastID', cnlastID.toString())
 
         let cnfirstID = responseData.data[0].id
-        AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
+        await AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
 
         DeviceEventEmitter.emit('getBadge')
       })
