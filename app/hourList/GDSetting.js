@@ -45,7 +45,6 @@ export default class GDSetting extends Component {
   }
 
   renderTitleItem() {
-    console.log('renderTitleItem')
     return <Text style={styles.navbarTitleItemStyle}>设置</Text>
   }
 

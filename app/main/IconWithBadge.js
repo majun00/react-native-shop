@@ -17,11 +17,6 @@ export default class GDNoDataView extends Component {
     this.state = {
       badgeCount: 0
     }
-    this.cnfirstID = 0
-    this.usfirstID = 0
-    this.cnbadgeText = 0
-    this.usbadgeText = 0
-    this.name=''
   }
 
   componentDidMount() {
@@ -39,40 +34,30 @@ export default class GDNoDataView extends Component {
     this.subscription.remove()
   }
 
-  getBadge() {
-    // AsyncStorage.multiGet(['cnfirstID', 'usfirstID'], (err, stores) => {
-    //   this.cnfirstID = parseInt(stores[0][1])
-    //   this.usfirstID = parseInt(stores[1][1])
-    // })
-    // if (this.cnfirstID !== 0 && this.usfirstID !== 0) {
-    //   let params = {
-    //     cnmaxid: this.cnfirstID,
-    //     usmaxid: this.usfirstID
-    //   }
-    //   HTTPBase.get('http://guangdiu.com/api/getnewitemcount.php', params)
-    //     .then(responseData => {
-    //       console.log('timer', responseData)
-    //       this.cnbadgeText = parseInt(responseData.cn)
-    //       this.usbadgeText = parseInt(responseData.us)
-    //     })
-    //     .catch(err => {})
-    // }
+  async getBadge() {
+    const res = await AsyncStorage.multiGet(['cnfirstID', 'usfirstID'])
+    const cnfirstID = res[0][1]
+    const usfirstID = res[1][1]
 
-    // mock
-    this.cnbadgeText = this.cnbadgeText + 1
-    this.usbadgeText = this.usbadgeText + 2
-
-    if (this.name == 'home') {
-      this.setState({
-        badgeCount: this.cnbadgeText
-      })
-    } else if (this.name == 'ht') {
-      this.setState({
-        badgeCount: this.usbadgeText
-      })
+    let params = {
+      cnmaxid: cnfirstID,
+      usmaxid: usfirstID
     }
 
-    console.log('getBadge', this.state.badgeCount)
+    HTTPBase.get('http://guangdiu.com/api/getnewitemcount.php', params)
+      .then(responseData => {
+        // console.log('timer', params, responseData)
+        if (this.name == 'home') {
+          this.setState({
+            badgeCount: parseInt(responseData.cn)
+          })
+        } else if (this.name == 'ht') {
+          this.setState({
+            badgeCount: parseInt(responseData.us)
+          })
+        }
+      })
+      .catch(err => {})
   }
 
   startBadgeTimer() {
@@ -81,7 +66,7 @@ export default class GDNoDataView extends Component {
     }
     this.timer = setInterval(() => {
       this.getBadge()
-    }, 10000)
+    }, 15000)
   }
 
   renderBadge(badgeCount) {

@@ -67,8 +67,15 @@ export default class GDHome extends Component {
     }
   }
 
-  fetchData(value = '') {
-    let params = { count: 10, sinceid: value, cate: this.cate, mall: this.mall }
+  async fetchData(value) {
+    let params = { count: 10, cate: this.cate, mall: this.mall }
+
+    if (value) {
+      Object.assign(params, {
+        sinceid: value
+      })
+    }
+
     HTTPBase.get('http://guangdiu.com/api/getlist.php', params)
       .then(responseData => {
         let oldData = this.state.dataSource
@@ -85,6 +92,8 @@ export default class GDHome extends Component {
         AsyncStorage.setItem('cnlastID', cnlastID.toString())
         let cnfirstID = responseData.data[0].id
         AsyncStorage.setItem('cnfirstID', cnfirstID.toString())
+
+        // console.log('home', cnfirstID, responseData.data[0].title)
 
         DeviceEventEmitter.emit('getBadge')
 
@@ -138,10 +147,9 @@ export default class GDHome extends Component {
     this.fetchData()
   }
 
-  onEndReached = () => {
-    AsyncStorage.getItem('cnlastID').then(value => {
-      this.fetchData(value)
-    })
+  onEndReached = async () => {
+    const value = await AsyncStorage.getItem('cnlastID')
+    this.fetchData(value)
   }
 
   renderLeftItem() {
