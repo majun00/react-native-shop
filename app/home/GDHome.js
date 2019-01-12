@@ -18,7 +18,7 @@ import {
   FlatList
 } from 'react-native'
 
-// import RealmBase from '../storage/realmStorage'
+import RealmBase from '../storage/realmStorage'
 import HomeSiftData from '../data/HomeSiftData.json'
 // import HTTPBase from '../http/HTTPBase'
 import CommunalNavBar from '../main/GDCommunalNavBar'
@@ -33,8 +33,8 @@ export default class GDHome extends Component {
     super(props)
     this.state = {
       dataSource: [],
-      loaded: false,
-      refreshing: false,
+      // loaded: false,
+      refreshing: true,
       isSiftModal: false
     }
     this.mall = ''
@@ -84,7 +84,7 @@ export default class GDHome extends Component {
         }
         this.setState({
           dataSource: oldData.concat(responseData.data),
-          loaded: true,
+          // loaded: true,
           refreshing: false
         })
 
@@ -97,22 +97,22 @@ export default class GDHome extends Component {
 
         DeviceEventEmitter.emit('getBadge')
 
-        // if (!value) {
-        //   console.log('!value')
-        //   RealmBase.removeAllData('HomeData')
-        //   RealmBase.create('HomeData', responseData.data)
-        // }
+        if (!value) {
+          // console.log('!value', responseData)
+          RealmBase.removeAllData('HomeData')
+          RealmBase.create('HomeData', responseData.data)
+        }
       })
       .catch(err => {
         // console.log('err', err, value)
-        // if (!value) {
-        //   let oldData = RealmBase.loadAll('HomeData')
-        //   this.setState({
-        //     dataSource: oldData,
-        //     loaded: true,
-        //     refreshing: false
-        //   })
-        // }
+        if (!value) {
+          let oldData = RealmBase.loadAll('HomeData')
+          this.setState({
+            dataSource: oldData,
+            // loaded: true,
+            refreshing: false
+          })
+        }
       })
   }
 
@@ -197,29 +197,38 @@ export default class GDHome extends Component {
     )
   }
 
+  renderListEmpty() {
+    return (
+      <View style={{height:500}}>
+        <NoDataView />
+      </View>
+    )
+  }
+
   renderView() {
-    if (this.state.loaded === false) {
-      return <NoDataView />
-    } else {
-      return (
-        <FlatList
-          ref="list"
-          data={this.state.dataSource}
-          renderItem={this.renderItem.bind(this)}
-          style={styles.listViewStyle}
-          refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-          ListFooterComponent={this.renderListFooter}
-          onEndReachedThreshold={0.1}
-          onEndReached={this.onEndReached}
-          // getItemLayout={(data, index) => ({
-          //   length: 100.5,
-          //   offset: 100.5 * index,
-          //   index
-          // })}
-        />
-      )
-    }
+    // if (this.state.loaded === false) {
+    //   return <NoDataView />
+    // } else {
+    return (
+      <FlatList
+        ref="list"
+        data={this.state.dataSource}
+        renderItem={this.renderItem.bind(this)}
+        style={styles.listViewStyle}
+        refreshing={this.state.refreshing}
+        onRefresh={this.onRefresh}
+        ListFooterComponent={this.renderListFooter}
+        ListEmptyComponent={this.renderListEmpty}
+        onEndReachedThreshold={0.1}
+        onEndReached={this.onEndReached}
+        // getItemLayout={(data, index) => ({
+        //   length: 100.5,
+        //   offset: 100.5 * index,
+        //   index
+        // })}
+      />
+    )
+    // }
   }
 
   renderListFooter() {

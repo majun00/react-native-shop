@@ -32,7 +32,7 @@ export default class GDHome extends Component {
     super(props)
     this.state = {
       dataSource: [],
-      loaded: false,
+      // loaded: false,
       refreshing: false,
       isSiftModal: false
     }
@@ -88,7 +88,7 @@ export default class GDHome extends Component {
         }
         this.setState({
           dataSource: oldData.concat(responseData.data),
-          loaded: true,
+          // loaded: true,
           refreshing: false
         })
 
@@ -184,24 +184,33 @@ export default class GDHome extends Component {
     )
   }
 
+  renderListEmpty() {
+    return (
+      <View style={{ height: 500 }}>
+        <NoDataView />
+      </View>
+    )
+  }
+
   renderView() {
-    if (this.state.loaded === false) {
-      return <NoDataView />
-    } else {
-      return (
-        <FlatList
-          ref="list"
-          data={this.state.dataSource}
-          renderItem={this.renderItem.bind(this)}
-          style={styles.listViewStyle}
-          refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-          ListFooterComponent={this.renderListFooter}
-          onEndReachedThreshold={0.1}
-          onEndReached={this.onEndReached}
-        />
-      )
-    }
+    // if (this.state.loaded === false) {
+    // return <NoDataView />
+    // } else {
+    return (
+      <FlatList
+        ref="list"
+        data={this.state.dataSource}
+        renderItem={this.renderItem.bind(this)}
+        style={styles.listViewStyle}
+        refreshing={this.state.refreshing}
+        onRefresh={this.onRefresh}
+        ListFooterComponent={this.renderListFooter}
+        ListEmptyComponent={this.renderListEmpty}
+        onEndReachedThreshold={0.1}
+        onEndReached={this.onEndReached}
+      />
+    )
+    // }
   }
 
   renderListFooter() {
